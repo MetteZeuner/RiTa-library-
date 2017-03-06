@@ -1,0 +1,39 @@
+
+var input; //input text box where user can write text. 
+var button; //submit button 
+var lexicon; // make us able to call the RiTa lexicon 
+
+function setup() {
+  noCanvas();  
+  lexicon = new RiLexicon(); // here we instantiate the the RiTa lexicon. 
+  
+  input = createInput('It was a dark and stormy night.');// here we instantiate the input text box and the text within it. 
+  button = createButton('submit'); // here we instantiate a button and the text "submit" within it. 
+  input.changed(processRita); // when something is changed in the textbox and press 'enter' (on keyboard) the function "processRita" runs. 
+  button.mousePressed(processRita); //when the you press the button with your mouse "processRita" runs. 
+  input.size(200); // here we determine the size of the text box. 
+}
+
+function processRita() {
+  var s = input.value(); // you get the value from the 'input' field and store it in a local variable in "function processRita". 
+  var rs = new RiString(s); // RiString makes us able to use RiTa library on the words in the variable 's'. 
+ var words = rs.words();  //it splits the 'rs' sentence in words and creates an array, which we store in the 'words' variable.  
+  var pos = rs.pos(); //it splits the 'rs' sentence and makes it able to identify the words within its linguistic class (adjective, noun, verb etc.) 
+    
+console.log (words);
+//console.log(pos); 
+  
+  var output =''; // we declare our variable 'output' and instantiate it with nothing. 
+  for(var i = 0; i < words.length; i++) { // for loop that runs and makes sure that the number of words in the input textbox equals the number of words in the output. 
+    if (/nn.*/.test(pos[i])) { //if the word is a noun change the word to another random noun. 
+      output += lexicon.randomWord(pos[i]); // gets a random word from the lexicon and is added to the output line.  
+      
+    } else {
+    output += words[i]; //if the word is not a noun, don't change it. 
+    }
+    
+    output += " "; //makes a space after each word. 
+  }
+  createP(output); //creates an HTML paragraph and shows the output sentence. 
+  
+}
